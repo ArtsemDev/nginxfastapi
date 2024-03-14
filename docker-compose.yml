@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+
+  app:
+    container_name: "ng-app"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python .
+    volumes:
+      - ".:/opt:rw"
+
+  app2:
+    container_name: "ng-app2"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python .
+    volumes:
+      - ".:/opt:rw"
+
+  app3:
+    container_name: "ng-app3"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python .
+    volumes:
+      - ".:/opt:rw"
+
+  server:
+    image: nginx:1.25.3-alpine3.18
+    volumes:
+      - "./statics:/opt/statics:ro"
+      - "./conf.d/app.conf:/etc/nginx/conf.d/app.conf:ro"
+      - "./log:/var/log/nginx:rw"
+      - "./cache:/var/lib/nginx/proxy_cache:rw"
+    depends_on:
+      - app
+    ports:
+      - "80:80"
